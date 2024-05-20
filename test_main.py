@@ -35,10 +35,16 @@ import os
 from datetime import datetime
 import shutil
 
-def list_files_walk(start_path:Path,list_of_allowed_file_names):
+def list_files_walk(search_path:Path,list_of_allowed_file_names):
+    """Function used to iterate over files under a given dir
+
+    Keyword arguments:
+    search_path                -- path to look for files/pictures
+    list_of_allowed_file_names -- list with the file suffixes to look for
+    """
     found_files_dict = {}
 
-    for root, dirs, files in os.walk(start_path):
+    for root, dirs, files in os.walk(search_path):
         for file in files:
             for file_subfix in list_of_allowed_file_names:
                 if file.endswith(file_subfix):
@@ -47,7 +53,13 @@ def list_files_walk(start_path:Path,list_of_allowed_file_names):
     return found_files_dict
 
 def create_folders(target_dir:Path,list_of_dates):
-    
+    """Function used to create folders based on the creation date of a file
+
+    Keyword arguments:
+    target_dir    -- location where the folders are created
+    list_of_dates -- list containing the dates as strings to create folders from
+    """
+
     for dir_element in list_of_dates:
         temp_dir_path = Path(target_dir,dir_element)
         if os.path.isdir(temp_dir_path):
@@ -57,6 +69,14 @@ def create_folders(target_dir:Path,list_of_dates):
             print(f"{temp_dir_path} has been created.")
 
 def check_if_file_already_exists(file_name:str, date_folder:str, target_path:Path):
+    """Function used to create folders based on the creation date of a file
+
+    Keyword arguments:
+    file_name    -- file name as string to check
+    date_folder  -- name of the date folder 
+    target_path  -- path of the target directory
+    """
+
     file_path_target = Path(target_path,date_folder,file_name)
 
     if file_path_target.is_file():
@@ -65,6 +85,13 @@ def check_if_file_already_exists(file_name:str, date_folder:str, target_path:Pat
         return False
     
 def copy_batched_files(dict_with_batched_files:dict[Path,Path],device_name:str):
+    """Function used to create folders based on the creation date of a file
+
+    Keyword arguments:
+    dict_with_batched_files -- dict with two paths containing the files to copy [source_path, target_path]
+    device_name             -- name of the device, used for logging
+    """
+
     number_of_files_to_copy : int = len(dict_with_batched_files)
     print(f"Found {number_of_files_to_copy} files in total to copy.")
     file_counter = 0
